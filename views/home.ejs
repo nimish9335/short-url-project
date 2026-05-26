@@ -1,56 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <title>URL Shortener Home</title>
     <style>
       body {
-        font-family: sans-serif;
-        padding: 20px;
-        background: #fafafa;
-      }
-      h1 {
-        color: #1a365d;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
     </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
   </head>
   <body>
-    <h1>URL Shortener System</h1>
-    <!-- Shortener Generation Form Input Section -->
-    <div style="margin-bottom: 30px;">
-        <form method="POST" action="/url">
-            <label>Enter Destination Long URL:</label>
-            <input type="text" name="url" placeholder="https://example.com" required />
-            <button type="submit">Generate Short Link</button>
-        </form>
-    </div>
-    <!-- Conditional Check: Render shortId value if present inside context headers -->
+    <h1>URL Shortener</h1>
     <% if (locals.id) { %>
-        <p style="color: green;">Short URL Created Successfully: <strong>http://localhost:8001/url/<%= id %></strong></p>
+    <p>URL Generated: http://localhost:8001/url/<%= id %></p>
     <% } %>
-    <!-- Analytical Records Data Grid Table -->
-    <h2>Existing Records & Usage Analytics</h2>
-    <% if (locals.urls) { %>
-        <table border="1" style="width:100%; border-collapse: collapse; text-align: left;">
-            <thead>
-                <tr style="background-color: #edf2f7;">
-                    <th>S.No</th>
-                    <th>Short Key ID</th>
-                    <th>Original Redirect Link</th>
-                    <th>Total Click History</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% urls.forEach((url, index) => { %>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <td><%= url.shortId %></td>
-                        <td><%= url.redirectURL %></td>
-                        <td><%= url.visitHistory.length %></td>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
-    <% } %>
-</body>
+
+    <div>
+      <form method="POST" action="/url">
+        <label>Enter Your Original URL</label>
+        <input type="text" name="url" placeholder="https://example.com" />
+        <button type="submit">Generate</button>
+      </form>
+    </div>
+    <div style="margin-top: 30px">
+      <% if (locals.urls) { %>
+      <table>
+        <thead>
+          <th>S. No</th>
+          <th>ShortID</th>
+          <th>Redirect</th>
+          <th>Clicks</th>
+        </thead>
+        <tbody>
+          <% urls.forEach((url, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= url.shortId %></td>
+            <td><%= url.redirectURL %></td>
+            <td><%= url.visitHistory.length %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
+  </body>
 </html>

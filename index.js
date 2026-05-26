@@ -1,9 +1,14 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const urlRouter=require("./routes/url");
-const staticRouter=require("./routes/staticRouter");
+const cookieParser = require("cookie-parser");
+const { restrictToLoggedinUserOnly, checkAuth } = require("./middleware/auth");
 const URL = require("./models/urls");
+
+const urlRoute=require("./routes/url");
+const staticRoute=require("./routes/staticRouter");
+const userRoute = require("./routes/user");
+
 const app = express();
 const PORT = 8001;
 
@@ -18,14 +23,15 @@ app.set("views", path.resolve("./views"));
 // Middleware Configuration
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // Mount the url creation routes
-app.use("/url", urlRouter);
-
-app.use("/", staticRouter);
+app.use("/url", restrictToLoggedinUserOnly, urlRoute);
+app.use("/user", userRoute);
+app.use("/", checkAuth, staticRoute);
 
 // Dynamic Redirection Handler and Analytic Logging
-app.get("/:shortId", async (req, res) => {
+app.get("/url/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
   const entry = await URL.findOneAndUpdate(
     { shortId },
@@ -39,6 +45,6 @@ app.get("/:shortId", async (req, res) => {
   return res.redirect(entry.redirectURL);
 });
 
-app.get("/analytics/:shortId",urlRouter);
+app.get("/analytics/:shortId",urlRoute);
 
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
