@@ -2,8 +2,6 @@ const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.JWT_SECRET;
 
-const secretKey = process.env.JWT_SECRET;
-
 function setUser(user) {
     const token = jwt.sign({ 
         id: user.id, 

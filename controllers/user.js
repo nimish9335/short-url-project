@@ -21,8 +21,7 @@ async function handleUserLogin(req, res) {
     }
     // Allocate session tokens for successful authentication
     const token = setUser(user);
-    res.cookie("uid", token); // Store session token via standard browser cookie
-    return res.redirect("/");
+    return res.json({token});
 }
 
 module.exports = {
