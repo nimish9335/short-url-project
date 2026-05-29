@@ -20,8 +20,8 @@ async function handleUserLogin(req, res) {
         });
     }
     // Allocate session tokens for successful authentication
-    const sessionId = setUser(user);
-    res.cookie("uid", sessionId); // Store session token via standard browser cookie
+    const token = setUser(user);
+    res.cookie("uid", token); // Store session token via standard browser cookie
     return res.redirect("/");
 }
 
