@@ -1,25 +1,25 @@
-const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
-const secretKey = process.env.JWT_SECRET;
+const secret = process.env.JWT_SECRET || "nimish@123";
 
 function setUser(user) {
-    const token = jwt.sign({ 
-        id: user.id, 
-        email: user.email
-        }, secretKey);
-    return token;
+    return jwt.sign(
+        {
+            _id: user._id,
+            email: user.email,
+            role: user.role,
+            name: user.name,
+        },
+        secret,
+        { expiresIn: "24h" }
+    );
 }
 
 function getUser(token) {
-    try{
-        const decoded = jwt.verify(token, secretKey);
-        return decoded;
-    } catch (error) {
+    try {
+        return jwt.verify(token, secret);
+    } catch (err) {
         return null;
     }
 }
 
-module.exports = {
-    setUser,
-    getUser,
-};
+module.exports = { setUser, getUser };
