@@ -1,12 +1,14 @@
 const express = require("express");
- const { handleGenerateNewShortURL, handleGetAnalytics } = require("../controllers/url");
+const { handleGenerateNewShortURL, handleGetAnalytics, handleRedirectShortURL } = require("../controllers/url");
+const router = express.Router();
 
- const router = express.Router();
- 
- // Map base POST route for shortening links
- router.post("/", handleGenerateNewShortURL);
+// Short URL create karo
+router.post("/", handleGenerateNewShortURL);
 
- // Map GET route for analytics
- router.get("/analytics/:shortId", handleGetAnalytics);
+// Short URL se redirect karo
+router.get("/:shortId", handleRedirectShortURL);
 
- module.exports = router;
+// Analytics dekho
+router.get("/analytics/:shortId", handleGetAnalytics);
+
+module.exports = router;
